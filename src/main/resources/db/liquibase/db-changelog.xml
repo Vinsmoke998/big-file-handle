@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="20211024-01-create-role-table" author="thang nguyen">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="role"/>
+            </not>
+        </preConditions>
+        <comment>Creating role table</comment>
+        <createTable tableName="role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="code" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="datetime" defaultValueDate="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="datetime" defaultValue="CURRENT_TIMESTAMP">
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <regExpReplace replace="'CURRENT_TIMESTAMP'" with="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="20211024-0001-add-role-member" author="thang nguyen">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="1">SELECT COUNT(*) FROM role WHERE code = 'MEMBER'</sqlCheck>
+            </not>
+        </preConditions>
+        <comment>Add member role</comment>
+        <insert tableName="role">
+            <column name="code" value="ROLE_MEMBER"/>
+            <column name="role_name" value="member role"/>
+        </insert>
+    </changeSet>
+    <changeSet id="20211024-0001-add-role-admin" author="thang nguyen">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="1">SELECT COUNT(*) FROM role WHERE code = 'ADMIN'</sqlCheck>
+            </not>
+        </preConditions>
+        <comment>Add member role</comment>
+        <insert tableName="role">
+            <column name="code" value="ROLE_ADMIN"/>
+            <column name="role_name" value="admin role"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="202110249-01-create-file-table" author="thang nguyen">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="file"/>
+            </not>
+        </preConditions>
+        <comment>Creating role table</comment>
+        <createTable tableName="file">
+            <column name="id" type="varchar(255)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_path" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="datetime" defaultValueDate="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="datetime" defaultValue="CURRENT_TIMESTAMP">
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <regExpReplace replace="'CURRENT_TIMESTAMP'" with="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+        </modifySql>
+    </changeSet>
+
+</databaseChangeLog>
